@@ -102,9 +102,9 @@ app.post("/login",async(req,resp)=>{
 
 
         resp.cookie("accessToken",accessToken,{httpOnly:true,
-            secure:false,sameSite:"Lax",maxAge:60*60*1000})
+            secure:true,sameSite:"None",maxAge:60*60*1000})
         .cookie("refreshToken",refreshToken,{httpOnly:true,
-            secure:false,sameSite:"Lax",maxAge:7*24*60*60*1000})
+            secure:true,sameSite:"None",maxAge:7*24*60*60*1000})
         .json({message:"login successfull"});
     }
     catch(err){
@@ -123,8 +123,8 @@ app.post("/refresh-token",async(req,resp)=>{
         const newAccessToken=jwtToken.sign({userId:user.id},SECRET_TOKEN_KEY,{expiresIn:"1h"})
         resp.cookie("accessToken",newAccessToken,{
             httpOnly:true,
-            secure:false,
-            sameSite:"Lax",maxAge:60*60*1000
+            secure:true,
+            sameSite:"None",maxAge:60*60*1000
         })
         .json({message:"Token refreshed"})
     }
