@@ -1,0 +1,54 @@
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+    "username":"Daveed",
+    "password":"Daveed@2021"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type:application/json
+
+{
+    "username":"Daveed",
+    "password":"Daveed@2021"
+}
+
+### 
+GET http://localhost:3000/protected
+
+###
+POST http://localhost:3000/logout
+
+###
+POST http://localhost:3000/refresh-token
+
+###
+GET http://localhost:3000/allcategory
+
+###
+POST http://localhost:3000/addcategory
+Content-Type: application/json 
+
+{
+    "title":"Men Clothes",
+    "image":"https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "category":"Clothes",
+    "itemCount":2
+
+}
+
+###
+PUT http://localhost:3000/editcategory/1
+Content-Type: application/json
+
+{
+    "title":"Men Clothes",
+    "image":"https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "category":"Clothes",
+    "itemCount":22
+}
+
+###
+DELETE http://localhost:3000/deletecategory/2
