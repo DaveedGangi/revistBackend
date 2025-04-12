@@ -20,6 +20,7 @@ const jwtToken= require("jsonwebtoken");
 
 const SECRET_TOKEN_KEY=process.env.SECRET_TOKEN_KEY;
 const REFRESH_TOKEN_KEY=process.env.REFRESH_TOKEN_KEY;
+const port=process.env.PORT || 3000
 
 
 const dbPath = path.join(__dirname,"revist.db");
@@ -34,8 +35,8 @@ const intializeDatabase=async()=>{
         driver: sqlite3.Database
     });
 
-    app.listen(3000,()=>{
-        console.log("Server started on port 3000");
+    app.listen(port,()=>{
+        console.log(`Server started on port ${port}`);
     });
     await db.run(`CREATE TABLE IF NOT EXISTS users
         (id INTEGER PRIMARY KEY,
@@ -101,9 +102,9 @@ app.post("/login",async(req,resp)=>{
 
 
         resp.cookie("accessToken",accessToken,{httpOnly:true,
-            secure:false,sameSite:"Lax",maxAge:60*60*1000})
+            secure:true,sameSite:"None",maxAge:60*60*1000})
         .cookie("refreshToken",refreshToken,{httpOnly:true,
-            secure:false,sameSite:"Lax",maxAge:7*24*60*60*1000})
+            secure:true,sameSite:"None",maxAge:7*24*60*60*1000})
         .json({message:"login successfull"});
     }
     catch(err){
@@ -122,8 +123,8 @@ app.post("/refresh-token",async(req,resp)=>{
         const newAccessToken=jwtToken.sign({userId:user.id},SECRET_TOKEN_KEY,{expiresIn:"1h"})
         resp.cookie("accessToken",newAccessToken,{
             httpOnly:true,
-            secure:false,
-            sameSite:"Lax",maxAge:60*60*1000
+            secure:true,
+            sameSite:"None",maxAge:60*60*1000
         })
         .json({message:"Token refreshed"})
     }
