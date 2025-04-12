@@ -7,7 +7,10 @@ const cookieParser = require("cookie-parser");
 
 
 app.use(express.json());
-app.use(cors({origin:"http://localhost:3000",credentials:true}));
+const allowedOrigins = ['http://localhost:3000', 'https://localhost:3000'];
+
+
+app.use(cors({origin:allowedOrigins,credentials:true}));
 app.use(cookieParser());
 require("dotenv").config();
 
@@ -21,6 +24,8 @@ const jwtToken= require("jsonwebtoken");
 const SECRET_TOKEN_KEY=process.env.SECRET_TOKEN_KEY;
 const REFRESH_TOKEN_KEY=process.env.REFRESH_TOKEN_KEY;
 const port=process.env.PORT || 3000
+
+
 
 
 const dbPath = path.join(__dirname,"revist.db");
@@ -101,10 +106,18 @@ app.post("/login",async(req,resp)=>{
             {expiresIn:"7d"})
 
 
-        resp.cookie("accessToken",accessToken,{httpOnly:true,
-            secure:true,sameSite:"None",maxAge:60*60*1000})
-        .cookie("refreshToken",refreshToken,{httpOnly:true,
-            secure:true,sameSite:"None",maxAge:7*24*60*60*1000})
+        resp.cookie("accessToken",accessToken,
+            {httpOnly:true,
+            secure:true,
+            sameSite:"None",
+            maxAge:60*60*1000}
+        )
+        .cookie("refreshToken",refreshToken,
+            {httpOnly:true,
+            secure:true,
+            sameSite:"None",
+            maxAge:7*24*60*60*1000}
+            )
         .json({message:"login successfull"});
     }
     catch(err){
@@ -166,6 +179,16 @@ app.get("/protected",authenticate,async(req,resp)=>{
         resp.json({message:"user not authenticated"})
     }
 })
+
+
+
+
+
+
+
+
+
+
 
 app.post("/addcategory",authenticate,async(req,resp)=>{
     const{title,image,category,itemCount}=req.body 
