@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 
 
 app.use(express.json());
-app.use(cors({origin:true,credentials:true}));
+app.use(cors({origin:"http://localhost:3000",credentials:true}));
 app.use(cookieParser());
 require("dotenv").config();
 
@@ -102,9 +102,9 @@ app.post("/login",async(req,resp)=>{
 
 
         resp.cookie("accessToken",accessToken,{httpOnly:true,
-            secure:true,sameSite:"None",maxAge:60*60*1000})
+            secure:false,sameSite:"Lax",maxAge:60*60*1000})
         .cookie("refreshToken",refreshToken,{httpOnly:true,
-            secure:true,sameSite:"None",maxAge:7*24*60*60*1000})
+            secure:false,sameSite:"Lax",maxAge:7*24*60*60*1000})
         .json({message:"login successfull"});
     }
     catch(err){
@@ -123,8 +123,8 @@ app.post("/refresh-token",async(req,resp)=>{
         const newAccessToken=jwtToken.sign({userId:user.id},SECRET_TOKEN_KEY,{expiresIn:"1h"})
         resp.cookie("accessToken",newAccessToken,{
             httpOnly:true,
-            secure:true,
-            sameSite:"None",maxAge:60*60*1000
+            secure:false,
+            sameSite:"Lax",maxAge:60*60*1000
         })
         .json({message:"Token refreshed"})
     }
@@ -157,8 +157,14 @@ const authenticate=(req,resp,next)=>{
     }
 }
 
-app.get("/protected",authenticate,(req,resp)=>{
-    resp.json({message:`user authenticated successfully ${req.userId}`})
+app.get("/protected",authenticate,async(req,resp)=>{
+    const userRow=await db.get("SELECT username FROM categories WHERE id=?",[req.userId])
+    if(userRow){
+        resp.json({message:"user authenticated successfully",username:userRow.username})
+    }
+    else{
+        resp.json({message:"user not authenticated"})
+    }
 })
 
 app.post("/addcategory",authenticate,async(req,resp)=>{
