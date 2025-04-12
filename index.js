@@ -158,7 +158,7 @@ const authenticate=(req,resp,next)=>{
 }
 
 app.get("/protected",authenticate,async(req,resp)=>{
-    const userRow=await db.get("SELECT username FROM categories WHERE id=?",[req.userId])
+    const userRow=await db.get("SELECT username FROM users WHERE id=?",[req.userId])
     if(userRow){
         resp.json({message:"user authenticated successfully",username:userRow.username})
     }
