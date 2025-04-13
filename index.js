@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 
 
 app.use(express.json());
-const allowedOrigins = ['http://localhost:3000', 'https://localhost:3000'];
+const allowedOrigins = ["https://shoppingdaveedgangi.netlify.app"];
 
 
 app.use(cors({origin:allowedOrigins,credentials:true}));
