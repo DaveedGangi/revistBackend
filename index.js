@@ -180,6 +180,24 @@ app.get("/protected",authenticate,async(req,resp)=>{
     }
 })
 
+app.get("/shopping/:id",authenticate,async(req,resp)=>{
+    try{
+    const{id}=req.params
+    if(!id ||isNaN(id)){
+        return resp.status(400).json({message:"invalid id provided"});
+    }
+    const findingItem=await db.get("SELECT * FROM categories WHERE id=?",[id])
+    if(findingItem){
+        resp.status(200).json(findingItem)
+    }
+    else{
+        resp.status(404).json({message:"Shopping item not found"})
+    }
+}
+catch{
+    resp.status(500).json({message:"Error occuring while finding shopping item"});
+}
+})
 
 
 

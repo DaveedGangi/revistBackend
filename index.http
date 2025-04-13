@@ -52,3 +52,6 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/deletecategory/2
+
+###
+GET http://localhost:3000/shopping/2
